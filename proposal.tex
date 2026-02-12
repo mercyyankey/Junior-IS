@@ -1,8 +1,3 @@
-% This is a template for your written document.
-%
-% To compile using latexmk on the command line, run the following: 
-% latexmk -pdf main.tex
-
 \documentclass[12pt]{article}
 \usepackage{setspace}
 \usepackage{graphicx} % used for includegraphics
@@ -18,7 +13,7 @@
 
 Heritage speakers of under-researched African languages often demonstrate strong listening comprehension while struggling with spontaneous language production. Many individuals raised in multilingual households can understand conversations fluently but lack confidence, vocabulary access, or grammatical control when speaking. This gap is particularly evident among heritage speakers of languages such as Twi, where formal instructional resources are limited and language learning is often informal, inconsistent, and orally transmitted.
 
-This project proposes the design of a language-learning application tailored to African heritage speakers, beginning with Twi. The goal of the application is to support the transition from comprehension to active language production by combining structured lessons, gamified practice, narrative-based learning, and low-effort review tools. By offering multiple learning pathways, the system aims to accommodate diverse cognitive styles, attention levels, and learning preferences while addressing the specific challenges faced by heritage language learners.
+This project proposes a language-learning application tailored to African heritage speakers, beginning with Twi. The goal of the application is to support the transition from comprehension to active language production by combining structured lessons, gamified practice, narrative-based learning, and low-effort review tools. By offering multiple learning pathways, the system aims to accommodate diverse cognitive styles, attention levels, and learning preferences while addressing the specific challenges faced by heritage language learners.
 
 \section*{Project Significance}
 Despite this targeted approach, many African languages spoken by heritage communities remain significantly under-researched and under-supported in contemporary language learning technologies. While widely spoken global languages benefit from extensive digital resources, standardized curricula, and high-quality translation systems, languages such as Twi are often excluded from these developments. As a result, heritage speakers frequently rely on informal transmission within families and communities, which can lead to strong comprehension but limited speaking confidence and inconsistent language use.
@@ -27,27 +22,55 @@ Most language-learning applications target second-language learners rather than 
 
 This project is significant because it centers on the needs of African heritage speakers and treats their linguistic background as an asset rather than an insufficiency. By designing a system that supports multiple learning pathways, including structured lessons, interactive games, narrative-based contexts, and low-effort review modes, the proposed application aims to bridge the gap between understanding and speaking. In doing so, this project contributes to broader conversations around equitable access to educational technology, culturally responsive design, and the preservation and revitalization of under-supported languages through thoughtful computational systems.
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[scale=0.7]{methodology.png}
-\caption{Archie}
-\label{fig:method}       % Give a unique label
-\end{center}
-\end{figure}
+\section*{Related Work}
+Gamification has become a common design strategy in mobile language-learning applications, often using mechanics such as points, levels, and streaks to motivate repeated practice. A survey of gamification elements in mobile language-learning apps highlights these recurring patterns and argues that their learning value depends on aligning game mechanics with meaningful instructional goals \cite{govender2020gamification}.
 
+Beyond gamification, prior work highlights the importance of adapting learning experiences to users’ cognitive states and real-world contexts. Schneegass et al.\ demonstrate that learners engage with mobile language-learning applications under varying conditions, including moments of focused attention as well as brief, low-effort interactions throughout the day \cite{schneegass2018adaptive}. Their findings suggest that applications supporting both longer lessons and short review sessions are better suited to diverse learner needs, motivating the inclusion of multiple learning pathways within the proposed application.
+
+Understanding how learners forget and re-learn vocabulary is particularly relevant for heritage speakers who already recognize many words but struggle with spontaneous production. Ma et al.\ investigate forgetting behavior in language learning and show that recall performance is strongly influenced by time gaps between practice, prior interaction history, and task format \cite{ma2026forgetting}. This work emphasizes the importance of spaced repetition and varied retrieval activities for strengthening active language use, directly informing the review and speed-practice components of the proposed application.
+
+Consistent engagement over time remains a key challenge in language-learning applications. Lyu et al.\ examine factors influencing learners’ continuance intention and find that perceived ease of use and experiences of flow are strong predictors of whether users continue engaging with a platform \cite{lyu2024continuance}. These results highlight the importance of intuitive interfaces and enjoyable interaction patterns, supporting the design goal of minimizing friction while maintaining meaningful learning experiences.
+
+Finally, narrative-based approaches have emerged as promising tools for contextualized language learning. Panchal et al.\ introduce a comic-based language learning system that embeds vocabulary and grammar within co-authored stories, reporting increased learner motivation and confidence through narrative immersion \cite{panchal2024lingocomics}. This approach directly informs the episode-based game component of the proposed application, which aims to situate language learning within culturally relevant contexts.
+
+\par
+Figure~\ref{fig:method} presents a prototype interface of the proposed application, illustrating the daily streak tracker, daily word widget, and bottom navigation to core features such as learning, games, translator, social feed, and profile settings.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{imgs/Project prototype.png}
+\caption{Prototype mockup of Mercy's L.L. App home screen interface.}
+\label{fig:method}
+\end{figure}
 
 \newpage
 \section*{Appendix}
-A concise list of features / user stories in the order in which they will be built. A few examples are below to demonstrate the expected scope and level of granularity; you will have more features than this.
+A list of planned software features is provided below, ordered according to the anticipated development timeline. Each feature is described at a level of detail for implementation.
+
+\begin{enumerate}
+	\item User account or local user profile creation with language selection (starting w/ the language Twi).
+	\item Baseline diagnostic quiz (approximately 20 items) to assess comprehension and production ability, with results stored for progress tracking.
+	\item Data schema for vocabulary items, including the word, audio pronunciation, English meaning, example sentence, example image, and descriptive tags.
+	\item Lesson interface that introduces 5--10 vocabulary items at a time using examples and contextual explanations.
+	\item Flashcard-based review mode implementing spaced repetition scheduling for previously learned vocabulary.
+	\item Speed quiz mode featuring timed multiple-choice and short-answer questions for rapid retrieval practice.
+	\item Production practice mode allowing users to record spoken responses or type answers to prompted questions.
+	\item Basic feedback system that displays model answers and highlights missing or incorrect keywords in user responses.
+	\item Mini-dictionary interface enabling search and browsing of all vocabulary items introduced in lessons.
+	\item Progress dashboard displaying learner accuracy, streaks, level progression, and time spent in the application.
+	\item Administrative content management tools for uploading, editing, and organizing vocabulary sets and lesson content.
+	\item Analytics logging system to record missed items, response latency, and retention patterns for future adaptive features.
+\end{enumerate}
+
+\noindent\textbf{Stretch Goals (time permitting):}
 \begin{itemize}
-	\item Default picture display on web application.
-	\item On a button-click, user can separate the image into foreground and background.
-	\item User can select a picture from their desktop.
-	\item Selected picture displays on the web application.
+	\item Additional game-based learning modes, including puzzle-style vocabulary games and episode-based comic narratives.
+	\item Short-form video feed exposing users to authentic language usage in a scrolling, social-media-inspired format.
+	\item Peer communication features such as chat or conversation rooms for practicing the language with other learners.
+	\item Expanded translation and dictionary functionality beyond the curated lesson vocabulary.
 \end{itemize}
 
-
 \bibliographystyle{acm}
-\bibliography{bibliography.bib}
+\bibliography{bibliography}
 
 \end{document}
