@@ -8,8 +8,8 @@ This calendar outlines the planned development schedule for the core features of
 
 | Due Date | Feature | GitHub Issue |
 |----------|---------|--------------|
-| 2026-02-20 | Lesson Interface | #5 |
-| 2026-02-27 | Flashcards + Spaced Repetition | #6 |
+| 2026-02-20 | Home Interface | #5 |
+| 2026-02-27 | Lesson Interface + Flashcards + Spaced Repetition | #6 |
 | 2026-03-06 | Speed Quiz Mode | #7 |
 | 2026-03-13 | Production Prompt Mode | #8 |
 | 2026-03-20 | Feedback System | #9 |
