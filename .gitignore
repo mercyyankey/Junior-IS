@@ -275,3 +275,10 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+# Expo / React Native
+twi-heritage-app/node_modules/
+twi-heritage-app/.expo/
+twi-heritage-app/.DS_Store
+twi-heritage-app/npm-debug.log*
+twi-heritage-app/yarn-debug.log*
+twi-heritage-app/yarn-error.log*
