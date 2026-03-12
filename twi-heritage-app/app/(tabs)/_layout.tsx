@@ -1,24 +1,74 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+//Controls the bottom tab navigation and tells the app which screens belong where 
+import { Tabs } from 'expo-router';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol name="house.fill" color={color} size={22} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="learn"
+        options={{
+          title: 'Learn',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="book.fill" color={color} size={22} />
+          ),
+        }}
+      />
+
+      {/* IMPORTANT: this tab expects a file at app/(tabs)/translate.tsx */}
+      <Tabs.Screen
+        name="translate"
+        options={{
+          title: 'Translate',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="globe" color={color} size={22} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="games"
+        options={{
+          title: 'Games',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="gamecontroller.fill" color={color} size={22} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="social"
+        options={{
+          title: 'Social',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="person.2.fill" color={color} size={22} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="person.crop.circle" color={color} size={22} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }

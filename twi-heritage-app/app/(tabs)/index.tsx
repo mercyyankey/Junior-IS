@@ -1,3 +1,4 @@
+//Implements the Home screen.
 import React, { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
