@@ -11,6 +11,7 @@
 
 \title{\textbf{Bridging Understanding to Speaking: A Language Learning Application for Heritage Speakers}}
 \author{Mercy Yankey}
+\date{April 8, 2026}
 
 \begin{document}
 
@@ -48,47 +49,56 @@
 
   \section{Related Work}
 
-  \subsection{Heritage Language Learning}
-  
-  Research on heritage language learning has shown that heritage speakers do not learn in the same way as second language learners. Instead of starting from zero, they already have some level of exposure to the language, but that knowledge is often incomplete or uneven. This creates a different learning profile that is not always supported by traditional language learning methods.
+\subsection{Heritage Language Learning}
 
-  One of the most common findings in this area is that heritage speakers tend to have stronger listening and comprehension skills, but weaker production abilities. In other words, they are often able to understand the language much better than they can actively use it. This gap becomes more noticeable in structured situations, such as writing or speaking formally, where they may struggle with grammar or vocabulary.
-  
-  Another key concept in this research is incomplete acquisition. This refers to situations where a speaker begins learning a language early in life, but does not fully develop all aspects of it. This is often due to a shift toward the dominant language, especially in school environments. Over time, this results in gaps in grammar, vocabulary, and confidence when using the language.
-  
-  At the same time, it is important to recognize that heritage speakers are not all the same. Their abilities can vary depending on how often they use the language, who they use it with, and whether they have had any formal instruction. Because of this, a single learning approach is often not effective, and more flexible or targeted approaches are needed.
-  
-  This section connects directly to my project because it highlights why existing language learning tools may not be effective for heritage speakers. If most tools are designed for learners starting from scratch, they may not address the specific gaps that heritage speakers experience.
-  
-  % --- NOTES FOR CONTINUATION ---
-  % add citations 
-  % connect more directly to “production vs comprehension gap”
-  % maybe include example (heritage speaker understands but cannot respond)
-  % transition into how this impacts app design
-  % move into next subsection: technology / apps
-  
+Research on heritage language learning has shown that heritage speakers do not learn in the same way as second language learners. Instead of starting from zero, they already have some level of exposure to the language, but that knowledge is often incomplete or uneven. This creates a different learning profile that is not always supported by traditional language learning methods.
+
+One of the most common findings in this area is that heritage speakers tend to have stronger listening and comprehension skills, but weaker production abilities. In other words, they are often able to understand the language much better than they can actively use it. This gap becomes more noticeable in structured situations, such as writing or speaking formally, where they may struggle with grammar or vocabulary. Research on heritage speakers’ vocabulary development supports this pattern, showing that productive language skills are often weaker than receptive skills \cite{gharibi2017factors}.
+
+Another key concept in this research is incomplete acquisition. This refers to situations where a speaker begins learning a language early in life, but does not fully develop all aspects of it. This is often due to a shift toward the dominant language, especially in school environments. Over time, this results in gaps in grammar, vocabulary, and confidence when using the language. Studies on heritage language development suggest that early exposure alone does not guarantee full proficiency, and that language abilities may stabilize before reaching native-like competence \cite{montrul2008gender}.
+
+At the same time, it is important to recognize that heritage speakers are not all the same. Their abilities can vary depending on how often they use the language, who they use it with, and whether they have had any formal instruction. Differences in language exposure and use play a major role in shaping these outcomes. For example, research on bilingual development shows that both the quantity and quality of language input significantly influence language proficiency over time \cite{hoff2018bilingual}. Because of this, a single learning approach is often not effective, and more flexible or targeted approaches are needed.
+
+This section connects directly to my project because it highlights why existing language learning tools may not be effective for heritage speakers. If most tools are designed for learners starting from scratch, they may not address the specific gaps that heritage speakers experience. In particular, the consistent gap between comprehension and production suggests that tools should focus more on active language use rather than passive recognition.
+
 \subsection{Technology in Language Learning}
+
 Technology has become a central component of modern language learning, particularly through mobile applications and computer-assisted language learning systems. Early research on Mobile Assisted Language Learning is focused on how digital tools could supplement traditional instruction by providing additional practice, flexibility, and access to learning materials. Levy describes how technology has evolved from simple instructional support to an integrated part of language learning environments, shaping how learners interact with content and practice language skills \cite{levy2009technology}.
 
-	More recent work has shifted toward evaluating the effectiveness of mobile language learning applications. Studies comparing platforms such as Duolingo, Babbel, and Busuu suggest that while these tools are widely used and accessible, their effectiveness depends heavily on how well their design aligns with actual learning needs \cite{muckenhumer2023}. Many applications emphasize repetition, vocabulary drills, and gamified interactions, which can support memorization but may not always translate into strong production skills.
+More recent work has shifted toward evaluating the effectiveness of mobile language learning applications. Studies comparing platforms such as Duolingo, Babbel, and Busuu suggest that while these tools are widely used and accessible, their effectiveness depends heavily on how well their design aligns with actual learning needs \cite{muckenhumer2023efficacy}. Many applications emphasize repetition, vocabulary drills, and gamified interactions, which can support memorization but may not always translate into strong production skills.
 
-	In addition to structured lessons, some research has explored the use of interactive and game-based learning environments. For example, projects incorporating storytelling, games, and interactive systems have shown that engagement and contextual learning can improve motivation and retention \cite{papadopoulos2013aladdin}. These approaches highlight the importance of designing learning experiences that go beyond isolated vocabulary practice and instead encourage active language use.
+In addition to structured lessons, some research has explored the use of interactive and game-based learning environments. Heritage language development is also shaped by broader educational and social factors \cite{byrnes2005heritage}. For example, projects incorporating storytelling, games, and interactive systems have shown that engagement and contextual learning can improve motivation and retention \cite{papadopoulos2013aladdin}. These approaches highlight the importance of designing learning experiences that go beyond isolated vocabulary practice and instead encourage active language use.
 
-	Despite these advancements, most language learning technologies are still designed with second language learners in mind. They typically assume that users are starting from scratch and follow a linear progression of lessons. This design does not account for heritage speakers, who already possess partial knowledge of the language but require support in developing production skills and filling specific gaps. As a result, there is a disconnect between existing research on heritage language learning and the design of current language learning applications.
+Despite these advancements, most language learning technologies are still designed with second language learners in mind. They typically assume that users are starting from scratch and follow a linear progression of lessons. This design does not account for heritage speakers, who already possess partial knowledge of the language but require support in developing production skills and filling specific gaps. As a result, there is a disconnect between existing research on heritage language learning and the design of current language learning applications.
 
+\subsection{Gaps in Existing Research}
 
+Overall, existing research highlights two key gaps. First, heritage language learners have distinct learning needs that are not fully addressed by traditional second language instruction models. While prior research clearly identifies differences in comprehension, production, and language development, these insights are not always reflected in the design of language learning tools.
 
+Second, while language learning technologies continue to expand, they are primarily designed for learners without prior exposure to the language. This creates a mismatch between how applications are structured and what heritage speakers actually need. In particular, many applications focus on recognition-based tasks rather than encouraging consistent language production, which is a critical area for heritage learners.
 
-\section{Methodology}
-This project focuses on the design and development of a mobile language learning application tailored specifically for heritage speakers, with an initial focus on the Twi language. Rather than following a traditional experimental study, this work takes a design-based approach, where insights from existing research are applied directly to the construction of the system.
+Additionally, many languages spoken by heritage communities, particularly African and other underrepresented languages, receive little attention in mainstream language learning platforms. This lack of representation limits access to learning resources and can make it more difficult for heritage speakers to maintain or improve their language skills.
 
-The application was developed using a modular structure, with each feature targeting a specific aspect of heritage language learning. Core components include flashcards with spaced repetition, production-based prompts, speed quizzes, and a feedback system. These features are designed to reinforce vocabulary while also encouraging active language production, which is a known challenge for heritage speakers. A key focus of the application is improving language production, particularly in conversational contexts. While many heritage speakers demonstrate strong comprehension, they often struggle with actively producing the language in real-time interactions. To address this, the application includes production-based prompts and response activities that require users to generate language rather than simply recognize it. These features are intended to simulate conversational use and reinforce active recall, which is critical for maintaining and strengthening language ability. By encouraging consistent output, the system aims to help users transition from passive understanding to more confident and spontaneous language use.
+Together, these gaps suggest a need for more targeted systems that account for both the linguistic background of heritage speakers and the limitations of current application design. This project builds on these findings by exploring how a language learning application can be designed specifically to support heritage speakers, with a focus on improving active language use.
+\section{Design Rationale}
 
-In addition to structured lessons, the application includes multiple modes of interaction, such as quick review sessions and game-based activities. This allows the system to support both focused learning and low-effort engagement throughout the day. The goal is to create a flexible learning environment that reflects how users actually interact with mobile applications.
+The design of this application is based on aligning system features with the known challenges faced by heritage language learners. Rather than simply describing what the system does, this section explains why these design choices were made and how they address gaps identified in prior research.
 
-Future evaluation of the system will involve measuring user engagement, added social meida like features, and accuracy in production tasks, and overall improvement in language use. While a full user study is outside the scope of this draft, the design of the application is informed by patterns identified in prior research on both heritage language learning and mobile-assisted language learning.  
+One of the primary design decisions was to prioritize language production over recognition. As discussed in prior research, heritage speakers often demonstrate strong comprehension skills but struggle with actively producing the language. Many existing applications emphasize vocabulary recognition and repetition, which may reinforce passive understanding but do not necessarily improve speaking ability. In response to this, the application includes production-based prompts and response activities that require users to generate language. This approach is intended to strengthen active recall and support more natural language use over time.
 
-Overall, existing research highlights two key gaps. First, heritage language learners have distinct learning needs that are not fully addressed by traditional second language instruction models. Second, while language learning technologies continue to expand, they are primarily designed for learners without prior exposure to the language. Together, these gaps suggest a need for more targeted systems that account for both the linguistic background of heritage speakers and the limitations of current application design. This project builds on these findings by exploring how a language learning application can be designed specifically to support heritage speakers, with a focus on improving active language use.
+Another key design choice is the use of spaced repetition and structured review. While spaced repetition is commonly used in language learning applications, it is particularly relevant for heritage speakers who may have gaps in vocabulary or inconsistent knowledge. By revisiting words over time, the system reinforces weaker areas while still building on existing knowledge. This allows learners to strengthen areas where their understanding may be incomplete without restarting from a beginner level.
+
+The inclusion of multiple interaction modes, such as quick review sessions and game-based activities, is also intentional. Mobile applications are often used in short, informal contexts, so the system is designed to support both focused learning and low-effort engagement. This flexibility reflects how users actually interact with language learning tools and encourages more consistent use of the application.
+
+In addition, this project focuses on the Twi language, which is currently underrepresented in mainstream language learning platforms. Many widely used applications prioritize globally dominant languages, leaving fewer resources available for African and other heritage languages. By designing specifically for Twi, this project addresses both a learning gap and a representation gap, highlighting how technology can support languages that are often overlooked in digital spaces.
+
+Overall, the design of the application reflects a shift away from traditional second language learning models and toward a more targeted approach. By focusing on production, reinforcement, and flexibility, the system aims to better support the unique learning profiles of heritage speakers while also contributing to broader efforts in language preservation and accessibility.
+
+% --- NOTES FOR CONTINUATION FROM WRITING CENTER ---
+% could connect more directly to specific features (games, social, translate)
+% could reference specific papers again (tie design decisions back to research)
+% could expand on underrepresented languages if needed
+
 \section{Conclusion}
 This project examined the gap between existing language learning technologies and the specific needs of heritage speakers. While current applications are widely used and accessible, they are primarily designed for second language learners, a  and do not account for the uneven skill development that is common among heritage users.
 
