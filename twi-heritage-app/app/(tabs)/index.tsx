@@ -1,13 +1,16 @@
-//Implements the Home screen.
+// Implements the Home screen.
 import React, { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 type ProgressState = {
-  daysThisWeek: number; // 0–7
+  daysThisWeek: number;
   streakDays: number;
+  wordsPracticed: number;
+  gamesPlayed: number;
 };
 
 type VocabItem = {
@@ -18,27 +21,26 @@ type VocabItem = {
   exampleEnglish: string;
 };
 
-// Home tab: small “daily word” list (kept separate from Learn tab lessons)
 const HOME_DAILY_WORDS: VocabItem[] = [
   {
     twi: 'Herh',
     english: 'An exclamation (wow/hey/oh really?)',
     definition:
-      'A versatile Ghanaian exclamation used to express intense emotions, including surprise, shock, admiration, or disbelief.',
-    exampleTwi: 'Herh! bra ha',
-    exampleEnglish: 'Hey! Come here',
+      'A versatile Ghanaian exclamation used to express surprise, shock, admiration, or disbelief.',
+    exampleTwi: 'Herh! bra ha.',
+    exampleEnglish: 'Hey! Come here.',
   },
   {
     twi: 'Ɛyɛ',
     english: 'It is good / Okay',
-    definition: 'Used to agree, confirm, or say something is fine/acceptable.',
+    definition: 'Used to agree, confirm, or say something is fine or acceptable.',
     exampleTwi: 'Ɛyɛ, yɛbɛhyia bio.',
     exampleEnglish: 'Okay, we will meet again.',
   },
   {
     twi: 'Mepa wo kyɛw',
     english: 'Please',
-    definition: 'Polite phrase used to ask for something or soften a request.',
+    definition: 'A polite phrase used to ask for something or soften a request.',
     exampleTwi: 'Mepa wo kyɛw, boa me kakra.',
     exampleEnglish: 'Please, help me a little.',
   },
@@ -47,13 +49,14 @@ const HOME_DAILY_WORDS: VocabItem[] = [
 const DEMO_PROGRESS: ProgressState = {
   daysThisWeek: 3,
   streakDays: 2,
+  wordsPracticed: 12,
+  gamesPlayed: 4,
 };
 
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
 }
 
-// Stable pick for the day (come back to fix later)
 function getDailyIndex(len: number) {
   const today = new Date();
   const key = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -72,89 +75,134 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Home</ThemedText>
-      <ThemedText style={styles.subtitle}>
-        Welcome back. This is the demo foundation for my Twi heritage speaker app.
-      </ThemedText>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ThemedView style={styles.container}>
+        <ThemedView style={styles.heroCard}>
+          <ThemedText type="title">Akwaaba back</ThemedText>
+          <ThemedText style={styles.subtitle}>
+            A Twi learning app designed for heritage speakers who may understand the language,
+            but want more confidence producing it.
+          </ThemedText>
+        </ThemedView>
 
-      <ThemedView style={styles.card}>
-        <ThemedText type="subtitle" style={styles.label}>
-          This week
-        </ThemedText>
+        <View style={styles.quickActionGrid}>
+          <Pressable style={styles.quickActionCard} onPress={() => router.push('/learn')}>
+            <ThemedText style={styles.quickIcon}>📚</ThemedText>
+            <ThemedText type="subtitle">Continue learning</ThemedText>
+            <ThemedText style={styles.small}>Flashcards, production, and speed recall.</ThemedText>
+          </Pressable>
 
-        <ThemedText style={styles.big}>
-          {DEMO_PROGRESS.daysThisWeek}/7 days
-        </ThemedText>
-
-        <View style={styles.progressTrack}>
-          <View style={[styles.progressFill, { width: `${pct * 100}%` }]} />
+          <Pressable style={styles.quickActionCard} onPress={() => router.push('/games')}>
+            <ThemedText style={styles.quickIcon}>🎮</ThemedText>
+            <ThemedText type="subtitle">Practice games</ThemedText>
+            <ThemedText style={styles.small}>Tap Match, Memory Match, and Road Quiz.</ThemedText>
+          </Pressable>
         </View>
 
-        <ThemedText style={styles.small}>
-          Current streak: {DEMO_PROGRESS.streakDays} day
-          {DEMO_PROGRESS.streakDays === 1 ? '' : 's'}
+        <ThemedView style={styles.card}>
+          <View style={styles.sectionHeader}>
+            <ThemedText type="subtitle" style={styles.label}>This week</ThemedText>
+            <ThemedText style={styles.badge}>{DEMO_PROGRESS.streakDays} day streak</ThemedText>
+          </View>
+
+          <ThemedText style={styles.big}>{DEMO_PROGRESS.daysThisWeek}/7 days</ThemedText>
+
+          <View style={styles.progressTrack}>
+            <View style={[styles.progressFill, { width: `${pct * 100}%` }]} />
+          </View>
+
+          <View style={styles.statsRow}>
+            <ThemedText style={styles.small}>{DEMO_PROGRESS.wordsPracticed} words practiced</ThemedText>
+            <ThemedText style={styles.small}>{DEMO_PROGRESS.gamesPlayed} games played</ThemedText>
+          </View>
+        </ThemedView>
+
+        <ThemedView style={styles.card}>
+          <View style={styles.sectionHeader}>
+            <ThemedText type="subtitle" style={styles.label}>Daily word</ThemedText>
+            <ThemedText style={styles.badge}>Today</ThemedText>
+          </View>
+
+          <ThemedText style={styles.word}>{dailyItem.twi}</ThemedText>
+          <ThemedText style={styles.small}>English: {dailyItem.english}</ThemedText>
+          {dailyItem.definition ? <ThemedText style={styles.small}>Meaning: {dailyItem.definition}</ThemedText> : null}
+
+          {showExample ? (
+            <ThemedView style={styles.exampleBox}>
+              <ThemedText type="subtitle" style={styles.label}>Example</ThemedText>
+              <ThemedText style={styles.small}>{dailyItem.exampleTwi}</ThemedText>
+              <ThemedText style={styles.small}>{dailyItem.exampleEnglish}</ThemedText>
+            </ThemedView>
+          ) : null}
+
+          <Pressable
+            style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+            onPress={() => setShowExample((visible) => !visible)}
+          >
+            <ThemedText style={styles.buttonText}>{showExample ? 'Hide example' : 'Reveal example'}</ThemedText>
+          </Pressable>
+        </ThemedView>
+
+        <ThemedView style={styles.card}>
+          <ThemedText type="subtitle" style={styles.label}>Feature map</ThemedText>
+          <View style={styles.featureRow}>
+            <ThemedText style={styles.featureStatus}>✅ Learn</ThemedText>
+            <ThemedText style={styles.small}>Flashcards, production prompts, and speed quiz</ThemedText>
+          </View>
+          <View style={styles.featureRow}>
+            <ThemedText style={styles.featureStatus}>✅ Games</ThemedText>
+            <ThemedText style={styles.small}>Vocabulary matching, memory practice, and crossing quiz</ThemedText>
+          </View>
+          <View style={styles.featureRow}>
+            <ThemedText style={styles.featureStatus}>🟡 Translate</ThemedText>
+            <ThemedText style={styles.small}>Prototype dictionary/translation support</ThemedText>
+          </View>
+        </ThemedView>
+
+        <ThemedText style={styles.footer}>
+          Demo note: progress is currently sample data. Future work will store practice history locally and connect it to spaced repetition.
         </ThemedText>
       </ThemedView>
-
-      <ThemedView style={styles.card}>
-        <ThemedText type="subtitle" style={styles.label}>
-          Daily word
-        </ThemedText>
-
-        <ThemedText style={styles.word}>{dailyItem.twi}</ThemedText>
-        <ThemedText style={styles.small}>English: {dailyItem.english}</ThemedText>
-        {dailyItem.definition ? (
-          <ThemedText style={styles.small}>Meaning: {dailyItem.definition}</ThemedText>
-        ) : null}
-
-        {showExample ? (
-          <ThemedView style={styles.exampleBox}>
-            <ThemedText type="subtitle" style={styles.label}>
-              Example
-            </ThemedText>
-            <ThemedText style={styles.small}>{dailyItem.exampleTwi}</ThemedText>
-            <ThemedText style={styles.small}>{dailyItem.exampleEnglish}</ThemedText>
-          </ThemedView>
-        ) : null}
-
-        <Pressable
-          style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-          onPress={() => setShowExample((v) => !v)}>
-          <ThemedText style={styles.buttonText}>
-            {showExample ? 'Hide example' : 'Reveal example'}
-          </ThemedText>
-        </Pressable>
-      </ThemedView>
-
-      <ThemedView style={styles.card}>
-        <ThemedText type="subtitle" style={styles.label}>
-          Today
-        </ThemedText>
-        <ThemedText style={styles.small}>
-          Lesson practice lives in the Learn tab.
-        </ThemedText>
-        <ThemedText style={styles.small}>
-          Games, Translate, Social, and Profile tabs are in the bar below but still in progress.
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedText style={styles.footer}>
-        Next steps: store progress locally and rotate the daily word from a bigger vocab list.
-      </ThemedText>
-    </ThemedView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContent: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     padding: 20,
     gap: 12,
     justifyContent: 'flex-start',
   },
+  heroCard: {
+    borderRadius: 20,
+    padding: 18,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(127,127,127,0.25)',
+  },
   subtitle: {
-    opacity: 0.8,
+    opacity: 0.82,
+    fontSize: 16,
+    lineHeight: 23,
+  },
+  quickActionGrid: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  quickActionCard: {
+    flex: 1,
+    borderRadius: 16,
+    padding: 14,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(127,127,127,0.25)',
+  },
+  quickIcon: {
+    fontSize: 28,
   },
   card: {
     borderRadius: 16,
@@ -163,8 +211,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(127,127,127,0.25)',
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
   label: {
     opacity: 0.8,
+  },
+  badge: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(127,127,127,0.25)',
+    fontSize: 13,
+    fontWeight: '700',
   },
   big: {
     fontSize: 34,
@@ -174,12 +237,25 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: '700',
   },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
   exampleBox: {
     marginTop: 8,
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: 'rgba(127,127,127,0.25)',
     gap: 6,
+  },
+  featureRow: {
+    gap: 2,
+    paddingVertical: 4,
+  },
+  featureStatus: {
+    fontSize: 16,
+    fontWeight: '700',
   },
   button: {
     marginTop: 10,
@@ -199,8 +275,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   small: {
-    fontSize: 16,
-    lineHeight: 22,
+    fontSize: 15,
+    lineHeight: 21,
   },
   progressTrack: {
     height: 12,
@@ -217,5 +293,6 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 6,
     opacity: 0.75,
+    lineHeight: 20,
   },
 });

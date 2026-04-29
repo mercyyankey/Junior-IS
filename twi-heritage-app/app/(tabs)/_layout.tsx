@@ -1,4 +1,4 @@
-//Controls the bottom tab navigation and tells the app which screens belong where 
+// Controls the bottom tab navigation and tells the app which screens belong where.
 import { Tabs } from 'expo-router';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -8,12 +8,13 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <IconSymbol name="house.fill" color={color} size={22} />
           ),
         }}
@@ -29,7 +30,6 @@ export default function TabLayout() {
         }}
       />
 
-      {/* IMPORTANT: this tab expects a file at app/(tabs)/translate.tsx */}
       <Tabs.Screen
         name="translate"
         options={{
