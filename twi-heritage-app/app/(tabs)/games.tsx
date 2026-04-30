@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { TWI_DATA } from '@/data/twiDataset';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -11,12 +12,18 @@ type MatchItem = {
   twi: string;
 };
 
-const MATCH_ITEMS: MatchItem[] = [
-  { id: 1, object: '🍎', english: 'Apple', twi: 'Apɔw' },
-  { id: 2, object: '💧', english: 'Water', twi: 'Nsuo' },
-  { id: 3, object: '🏠', english: 'House', twi: 'Fie' },
-  { id: 4, object: '📚', english: 'Book', twi: 'Nhoma' },
-];
+const GAME_EMOJIS = ['🗣️', '💬', '👂🏾', '📚', '✨', '🌍'];
+
+const MATCH_ITEMS: MatchItem[] = TWI_DATA.filter(
+  (item) => item.english.split(' ').length <= 4 && item.twi.split(' ').length <= 6
+)
+  .slice(0, 6)
+  .map((item, index) => ({
+    id: index + 1,
+    object: GAME_EMOJIS[index % GAME_EMOJIS.length],
+    english: item.english,
+    twi: item.twi,
+  }));
 
 function shuffle<T>(array: T[]) {
   return [...array].sort(() => Math.random() - 0.5);
@@ -76,7 +83,7 @@ export default function GamesScreen() {
       <ThemedView style={styles.container}>
         <ThemedText type="title">Games</ThemedText>
         <ThemedText style={styles.sub}>
-          Choose a game to practice Twi vocabulary.
+          Choose a game to practice Twi vocabulary from the cleaned dataset.
         </ThemedText>
 
         <Pressable style={styles.gameSelectCard} onPress={() => setGameMode('tapMatch')}>
@@ -111,7 +118,7 @@ export default function GamesScreen() {
       </Pressable>
       <ThemedText type="title">Object Match</ThemedText>
       <ThemedText style={styles.sub}>
-        Match each object to the correct Twi word.
+        Match each prompt to the correct Twi word.
       </ThemedText>
 
       <View style={styles.scoreBox}>
@@ -121,7 +128,7 @@ export default function GamesScreen() {
         </ThemedText>
       </View>
 
-      <ThemedText type="subtitle">Objects</ThemedText>
+      <ThemedText type="subtitle">Prompts</ThemedText>
 
       <View style={styles.grid}>
         {MATCH_ITEMS.map((item) => {
@@ -436,7 +443,7 @@ function RoadCrossingQuizGame({ onBack }: { onBack: () => void }) {
 
       <ThemedText type="title">Road Crossing Quiz</ThemedText>
       <ThemedText style={styles.sub}>
-        Avoid the moving cars, reach the safe row, then answer a Twi question to continue.
+        Avoid the moving cars, reach the safe row, then answer a Twi dataset question to continue.
       </ThemedText>
 
       <View style={styles.scoreBox}>

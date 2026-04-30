@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { TWI_DATA } from '@/data/twiDataset';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -16,43 +17,17 @@ type LearnMode = 'flashcards' | 'production' | 'speed';
 
 type Feedback = null | 'correct' | 'incorrect';
 
-const LESSON_WORDS: VocabItem[] = [
-  {
-    twi: 'Akwaaba',
-    english: 'Welcome',
-    exampleTwi: 'Akwaaba, me nua.',
-    exampleEnglish: 'Welcome, my friend.',
-    productionPrompt: 'How would you say “Welcome” in Twi?',
-  },
-  {
-    twi: 'Medaase',
-    english: 'Thank you',
-    exampleTwi: 'Medaase sɛ wo boa me.',
-    exampleEnglish: 'Thank you for helping me.',
-    productionPrompt: 'How would you say “Thank you” in Twi?',
-  },
-  {
-    twi: 'Ɛte sɛn?',
-    english: 'How are you?',
-    exampleTwi: 'Ɛte sɛn? Wo ho te dɛn?',
-    exampleEnglish: 'How are you? How is your body?',
-    productionPrompt: 'How would you ask “How are you?” in Twi?',
-  },
-  {
-    twi: 'Nsuo',
-    english: 'Water',
-    exampleTwi: 'Mepɛ nsuo.',
-    exampleEnglish: 'I want water.',
-    productionPrompt: 'How would you say “Water” in Twi?',
-  },
-  {
-    twi: 'Fie',
-    english: 'House',
-    exampleTwi: 'Merekɔ fie.',
-    exampleEnglish: 'I am going home.',
-    productionPrompt: 'How would you say “House” or “Home” in Twi?',
-  },
-];
+const LESSON_WORDS: VocabItem[] = TWI_DATA.filter(
+  (item) => item.english.split(' ').length <= 5 && item.twi.split(' ').length <= 7
+)
+  .slice(0, 20)
+  .map((item) => ({
+    twi: item.twi,
+    english: item.english,
+    exampleTwi: item.twi,
+    exampleEnglish: item.english,
+    productionPrompt: `How would you say “${item.english}” in Twi?`,
+  }));
 
 function normalizeAnswer(value: string) {
   return value.trim().toLowerCase().replace(/[?.!,]/g, '');
@@ -183,7 +158,7 @@ export default function LearnScreen() {
       <ThemedView style={styles.container}>
         <ThemedText type="title">Learn</ThemedText>
         <ThemedText style={styles.subtitle}>
-          Practice Twi through recognition, production, and timed recall.
+          Practice Twi through recognition, production, and timed recall using the cleaned dataset.
         </ThemedText>
 
         <View style={styles.modeRow}>
@@ -394,7 +369,7 @@ export default function LearnScreen() {
         ) : null}
 
         <ThemedText style={styles.footer}>
-          Future work: connect this lesson flow to persistent spaced-repetition data and a larger Twi content set.
+          Dataset note: this lesson uses a filtered subset of the cleaned Twi dataset. Future work will add persistent spaced repetition and audio playback.
         </ThemedText>
       </ThemedView>
     </ScrollView>

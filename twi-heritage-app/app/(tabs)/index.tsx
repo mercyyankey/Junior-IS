@@ -1,7 +1,8 @@
 // Implements the Home screen.
 import React, { useMemo, useState } from 'react';
-import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { TWI_DATA } from '@/data/twiDataset';
+import { router } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -12,39 +13,6 @@ type ProgressState = {
   wordsPracticed: number;
   gamesPlayed: number;
 };
-
-type VocabItem = {
-  twi: string;
-  english: string;
-  definition?: string;
-  exampleTwi: string;
-  exampleEnglish: string;
-};
-
-const HOME_DAILY_WORDS: VocabItem[] = [
-  {
-    twi: 'Herh',
-    english: 'An exclamation (wow/hey/oh really?)',
-    definition:
-      'A versatile Ghanaian exclamation used to express surprise, shock, admiration, or disbelief.',
-    exampleTwi: 'Herh! bra ha.',
-    exampleEnglish: 'Hey! Come here.',
-  },
-  {
-    twi: 'Ɛyɛ',
-    english: 'It is good / Okay',
-    definition: 'Used to agree, confirm, or say something is fine or acceptable.',
-    exampleTwi: 'Ɛyɛ, yɛbɛhyia bio.',
-    exampleEnglish: 'Okay, we will meet again.',
-  },
-  {
-    twi: 'Mepa wo kyɛw',
-    english: 'Please',
-    definition: 'A polite phrase used to ask for something or soften a request.',
-    exampleTwi: 'Mepa wo kyɛw, boa me kakra.',
-    exampleEnglish: 'Please, help me a little.',
-  },
-];
 
 const DEMO_PROGRESS: ProgressState = {
   daysThisWeek: 3,
@@ -70,8 +38,11 @@ export default function HomeScreen() {
   const [showExample, setShowExample] = useState(false);
 
   const dailyItem = useMemo(() => {
-    const i = getDailyIndex(HOME_DAILY_WORDS.length);
-    return HOME_DAILY_WORDS[i];
+    const dailyWords = TWI_DATA.filter(
+      (item) => item.english.split(' ').length <= 5 && item.twi.split(' ').length <= 7
+    );
+    const i = getDailyIndex(dailyWords.length);
+    return dailyWords[i];
   }, []);
 
   return (
@@ -125,13 +96,13 @@ export default function HomeScreen() {
 
           <ThemedText style={styles.word}>{dailyItem.twi}</ThemedText>
           <ThemedText style={styles.small}>English: {dailyItem.english}</ThemedText>
-          {dailyItem.definition ? <ThemedText style={styles.small}>Meaning: {dailyItem.definition}</ThemedText> : null}
+          <ThemedText style={styles.small}>Source: cleaned Twi dataset</ThemedText>
 
           {showExample ? (
             <ThemedView style={styles.exampleBox}>
               <ThemedText type="subtitle" style={styles.label}>Example</ThemedText>
-              <ThemedText style={styles.small}>{dailyItem.exampleTwi}</ThemedText>
-              <ThemedText style={styles.small}>{dailyItem.exampleEnglish}</ThemedText>
+              <ThemedText style={styles.small}>{dailyItem.twi}</ThemedText>
+              <ThemedText style={styles.small}>{dailyItem.english}</ThemedText>
             </ThemedView>
           ) : null}
 
@@ -154,13 +125,13 @@ export default function HomeScreen() {
             <ThemedText style={styles.small}>Vocabulary matching, memory practice, and crossing quiz</ThemedText>
           </View>
           <View style={styles.featureRow}>
-            <ThemedText style={styles.featureStatus}>🟡 Translate</ThemedText>
-            <ThemedText style={styles.small}>Prototype dictionary/translation support</ThemedText>
+            <ThemedText style={styles.featureStatus}>✅ Translate</ThemedText>
+            <ThemedText style={styles.small}>Searchable dictionary powered by the cleaned Twi dataset</ThemedText>
           </View>
         </ThemedView>
 
         <ThemedText style={styles.footer}>
-          Demo note: progress is currently sample data. Future work will store practice history locally and connect it to spaced repetition.
+          Dataset note: daily words, lessons, dictionary, and games now pull from the cleaned Twi dataset. Progress is still sample data.
         </ThemedText>
       </ThemedView>
     </ScrollView>

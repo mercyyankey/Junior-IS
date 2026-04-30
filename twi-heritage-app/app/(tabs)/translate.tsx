@@ -1,137 +1,132 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Audio } from 'expo-av';
+import { useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
+import { TWI_DATA } from '@/data/twiDataset';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-type Entry = {
-  twi: string;
-  english: string;
-};
+const AUDIO_SOURCES: Record<string, any> = {};
 
-const DICTIONARY: Entry[] = [
-  { twi: 'Akwaaba', english: 'Welcome' },
-  { twi: 'Medaase', english: 'Thank you' },
-  { twi: 'Ɛte sɛn?', english: 'How are you?' },
-  { twi: 'Nsuo', english: 'Water' },
-  { twi: 'Fie', english: 'House / Home' },
-  { twi: 'Mepa wo kyɛw', english: 'Please' },
-];
-
-type Mode = 'translate' | 'dictionary';
-
-function normalize(text: string) {
-  return text.trim().toLowerCase();
+function normalize(value: string) {
+  return value.trim().toLowerCase();
 }
 
 export default function TranslateScreen() {
-  const [mode, setMode] = useState<Mode>('translate');
   const [input, setInput] = useState('');
-  const [result, setResult] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
+  const [audioFeedback, setAudioFeedback] = useState('');
 
-  function handleTranslate() {
+  const results = useMemo(() => {
     const query = normalize(input);
 
-    const match = DICTIONARY.find(
-      (item) => normalize(item.twi) === query || normalize(item.english) === query
-    );
-
     if (!query) {
-      setResult('Enter a word or phrase.');
+      return [];
+    }
+
+    return TWI_DATA.filter(
+      (item) =>
+        normalize(item.twi).includes(query) ||
+        normalize(item.english).includes(query)
+    ).slice(0, 25);
+  }, [input]);
+
+  async function playAudio(audioPath: string) {
+    const source = AUDIO_SOURCES[audioPath];
+
+    if (!source) {
+      setAudioFeedback('Audio is not mapped for this entry yet.');
       return;
     }
 
-    if (!match) {
-      setResult('No match found.');
-      return;
-    }
+    try {
+      setAudioFeedback('Playing audio...');
+      const { sound } = await Audio.Sound.createAsync(source);
+      await sound.playAsync();
 
-    if (normalize(match.twi) === query) {
-      setResult(`English: ${match.english}`);
-    } else {
-      setResult(`Twi: ${match.twi}`);
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded && status.didJustFinish) {
+          sound.unloadAsync();
+          setAudioFeedback('');
+        }
+      });
+    } catch (error) {
+      setAudioFeedback('Could not play audio.');
     }
   }
 
-  const filteredDictionary = useMemo(() => {
-    const q = normalize(search);
-    if (!q) return DICTIONARY;
-
-    return DICTIONARY.filter(
-      (item) =>
-        normalize(item.twi).includes(q) || normalize(item.english).includes(q)
-    );
-  }, [search]);
-
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Translate & Dictionary</ThemedText>
-      <ThemedText style={styles.sub}>
-        Look up Twi words or translate simple phrases.
-      </ThemedText>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ThemedView style={styles.container}>
+        <ThemedText type="title">Translate & Dictionary</ThemedText>
+        <ThemedText style={styles.sub}>
+          Search Twi or English to find matching words and phrases from the dataset.
+        </ThemedText>
 
-      <View style={styles.modeRow}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.modeButton,
-            mode === 'translate' && styles.activeMode,
-            pressed && styles.pressed,
-          ]}
-          onPress={() => setMode('translate')}
-        >
-          <ThemedText>Translate</ThemedText>
-        </Pressable>
+        <TextInput
+          placeholder="Search Twi or English"
+          value={input}
+          onChangeText={setInput}
+          style={styles.input}
+        />
 
-        <Pressable
-          style={({ pressed }) => [
-            styles.modeButton,
-            mode === 'dictionary' && styles.activeMode,
-            pressed && styles.pressed,
-          ]}
-          onPress={() => setMode('dictionary')}
-        >
-          <ThemedText>Dictionary</ThemedText>
-        </Pressable>
-      </View>
+        {audioFeedback ? <ThemedText style={styles.feedback}>{audioFeedback}</ThemedText> : null}
 
-      {mode === 'translate' ? (
-        <ThemedView style={styles.card}>
-          <TextInput
-            value={input}
-            onChangeText={setInput}
-            placeholder="Enter Twi or English"
-            style={styles.input}
-          />
+        {!input.trim() ? (
+          <ThemedView style={styles.card}>
+            <ThemedText type="subtitle">Dictionary preview</ThemedText>
+            <ThemedText style={styles.small}>
+              Try searching for “thank you”, “water”, “sorry”, “where”, or “come”.
+            </ThemedText>
+          </ThemedView>
+        ) : null}
 
-          <Pressable style={styles.button} onPress={handleTranslate}>
-            <ThemedText style={styles.buttonText}>Translate</ThemedText>
-          </Pressable>
+        {input.trim() && results.length === 0 ? (
+          <ThemedView style={styles.card}>
+            <ThemedText type="subtitle">No results found</ThemedText>
+            <ThemedText style={styles.small}>
+              Try a shorter search term or check the spelling.
+            </ThemedText>
+          </ThemedView>
+        ) : null}
 
-          {result ? <ThemedText style={styles.result}>{result}</ThemedText> : null}
-        </ThemedView>
-      ) : (
-        <ThemedView style={styles.card}>
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search dictionary"
-            style={styles.input}
-          />
-
-          {filteredDictionary.map((item) => (
-            <View key={item.twi} style={styles.entry}>
-              <ThemedText style={styles.entryTwi}>{item.twi}</ThemedText>
-              <ThemedText style={styles.entryEnglish}>{item.english}</ThemedText>
+        {results.length > 0 ? (
+          <ThemedView style={styles.card}>
+            <View style={styles.sectionHeader}>
+              <ThemedText type="subtitle">Results</ThemedText>
+              <ThemedText style={styles.badge}>{results.length}</ThemedText>
             </View>
-          ))}
-        </ThemedView>
-      )}
-    </ThemedView>
+
+            {results.map((item) => {
+              const hasAudio = Boolean(AUDIO_SOURCES[item.audioPath]);
+
+              return (
+                <ThemedView key={`${item.id}-${item.audioPath}`} style={styles.resultCard}>
+                  <ThemedText style={styles.twiText}>{item.twi}</ThemedText>
+                  <ThemedText style={styles.englishText}>{item.english}</ThemedText>
+                  <ThemedText style={styles.metaText}>{item.category} • {item.difficulty}</ThemedText>
+
+                  <Pressable
+                    style={[styles.audioButton, !hasAudio && styles.disabledButton]}
+                    onPress={() => playAudio(item.audioPath)}
+                  >
+                    <ThemedText style={styles.audioButtonText}>
+                      {hasAudio ? '🔊 Play pronunciation' : 'Audio not mapped yet'}
+                    </ThemedText>
+                  </Pressable>
+                </ThemedView>
+              );
+            })}
+          </ThemedView>
+        ) : null}
+      </ThemedView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContent: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -139,56 +134,77 @@ const styles = StyleSheet.create({
   },
   sub: {
     opacity: 0.8,
+    fontSize: 16,
+    lineHeight: 22,
   },
-  modeRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  modeButton: {
-    flex: 1,
-    padding: 10,
-    borderRadius: 10,
+  input: {
     borderWidth: 1,
-    alignItems: 'center',
+    borderColor: 'rgba(127,127,127,0.45)',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 16,
   },
-  activeMode: {
-    backgroundColor: '#e5e7eb',
-  },
-  pressed: {
-    opacity: 0.7,
+  feedback: {
+    fontSize: 14,
+    fontWeight: '600',
+    opacity: 0.8,
   },
   card: {
     borderRadius: 16,
     padding: 16,
     gap: 10,
     borderWidth: 1,
+    borderColor: 'rgba(127,127,127,0.25)',
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
-  },
-  button: {
-    padding: 12,
-    borderRadius: 10,
+  sectionHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  badge: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 999,
     borderWidth: 1,
-  },
-  buttonText: {
-    fontWeight: '600',
-  },
-  result: {
-    marginTop: 10,
-    fontSize: 16,
-  },
-  entry: {
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-  },
-  entryTwi: {
+    borderColor: 'rgba(127,127,127,0.25)',
     fontWeight: '700',
   },
-  entryEnglish: {
-    opacity: 0.8,
+  resultCard: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(127,127,127,0.2)',
+    gap: 6,
+  },
+  twiText: {
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  englishText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  metaText: {
+    fontSize: 13,
+    opacity: 0.65,
+  },
+  audioButton: {
+    marginTop: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(127,127,127,0.35)',
+    alignItems: 'center',
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  audioButtonText: {
+    fontWeight: '700',
+  },
+  small: {
+    fontSize: 15,
+    lineHeight: 21,
   },
 });
